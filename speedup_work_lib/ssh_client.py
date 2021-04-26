@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-.. current_module:: base_setup.py
+.. current_module:: ssh_client.py
 .. created_by:: Darren Xie
 .. created_on:: 06/07/2021
 

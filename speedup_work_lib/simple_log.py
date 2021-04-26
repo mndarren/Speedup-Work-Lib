@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 """
-.. current_module:: base_setup.py
+.. current_module:: simple_log.py
 .. created_by:: Darren Xie
 .. created_on:: 04/25/2021
 
-This python script is base script to set up MIS development environment.
+This python script is a simple log.
 """
 import sys
 from datetime import datetime

@@ -10,11 +10,8 @@ Collect File action tools
 """
 import os
 import re
-import shutil
 import stat
-from glob import glob
-from pathlib import Path
-from datetime import datetime
+
 PERCENT_RE = re.compile(r'%(.+?)%')
 
 
