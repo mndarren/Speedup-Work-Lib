@@ -26,9 +26,9 @@ setup(
     include_package_data=True,
     long_description=long_desc,
     classifiers=[
+        "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
-        "Topic :: Utilities",
-        "License :: Apache 2.0",
+        "License :: OSI Approved :: Apache License",
     ],
     python_require='>=3.9',
     install_requires=[
