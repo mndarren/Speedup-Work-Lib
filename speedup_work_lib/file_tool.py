@@ -45,13 +45,14 @@ class FileTool:
                     key, value = line.split('=', 1)
                     key, value = key.strip(), value.strip().replace('\\', '/')
 
-                    if '%' in value:
-                        try:
-                            while '%' in value:
-                                try_k = re.search(PERCENT_RE, value).group(1)
-                                value = re.sub(PERCENT_RE, os.environ[try_k].replace('\\', '/'), value, 1)
-                        except Exception:
-                            raise Exception(f"{try_k} not defined")
+                    # Keep the following comment for future
+                    # if '%' in value:
+                    #     try:
+                    #         while '%' in value:
+                    #             try_k = re.search(PERCENT_RE, value).group(1)
+                    #             value = re.sub(PERCENT_RE, os.environ[try_k].replace('\\', '/'), value, 1)
+                    #     except Exception:
+                    #         raise Exception(f"{try_k} not defined")
                     os.environ[key] = value.replace('/', '\\')
         except IOError:
             raise IOError(f"Cannot open file {full_path}")
