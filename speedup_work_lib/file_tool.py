@@ -28,6 +28,8 @@ class FileTool:
     2. Unit to Dos format conversion
     3. Dos ot Unit format conversion.
     """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def load_env(self, full_path):
         """

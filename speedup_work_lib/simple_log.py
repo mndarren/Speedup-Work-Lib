@@ -8,6 +8,7 @@ This python script is a simple log.
 """
 import sys
 from datetime import datetime
+from inspect import getframeinfo, stack
 
 TIME_FORMAT = '%H:%M:%S'
 
@@ -24,18 +25,22 @@ class SimpleLog:
     def start_log(self):
         """print out start time"""
         self.start_time = datetime.now()
-        sys.stdout.write(f"Starting process at {self._curr_time()}\n")
+        self.print_log(f"Starting program: {getframeinfo(stack()[1][0]).filename}")
         self.break_section()
 
     def print_log(self, msg=''):
-        """print out the log message"""
-        sys.stdout.write(f"[{self._curr_time()}]: {msg}\n")
+        """
+        Print out the log message
+        :param msg: Log message
+        """
+        caller = getframeinfo(stack()[1][0])
+        sys.stdout.write(f"[{self._curr_time()}][{caller.function - caller.lineno}]: {msg}\n")
 
     def stop_log(self):
         """print out duration time"""
         duration = datetime.now() - self.start_time
         self.break_section()
-        sys.stdout.write(f"Done to spend time: {str(duration)}\n")
+        self.print_log(f"Done to spend time: {str(duration)}")
 
     def _curr_time(self):
         """
@@ -47,4 +52,4 @@ class SimpleLog:
         """
         :return: break section lines
         """
-        return '-' * 120
+        return f"{'-' * 120}\n"

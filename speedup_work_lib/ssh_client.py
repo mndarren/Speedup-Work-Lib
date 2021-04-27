@@ -2,9 +2,9 @@
 """
 .. current_module:: ssh_client.py
 .. created_by:: Darren Xie
-.. created_on:: 06/07/2021
+.. created_on:: 04/26/2021
 
-This python script is base script to set up MIS development environment.
+This python script is base script to connect Linux server by SSH.
 """
 import sys
 from datetime import datetime
@@ -32,11 +32,18 @@ class SshClient:
             raise Exception(f"Cannot connect to the SSH server: {str(e)}")
 
     def close(self):
+        """Close client."""
         if self.client is not None:
             self.client.close()
             self.client = None
 
     def execute(self, command, sudo=False, verbose=False):
+        """
+        Excecute a single command.
+        :param command: Command to be executed
+        :param sudo: Add sudo for this command if True
+        :param verbose: print out the command if True.
+        """
         if verbose:
             self._print_log(f"Running command: [{command}]")
         feed_password = False
@@ -51,6 +58,27 @@ class SshClient:
                 'err': stderr.readlines(),
                 'retval': stdout.channel.recv_exit_status()}
 
+    def execute_cmd_list_sudo(self, cmd_list):
+        """
+        Execute command list with sudo.
+        :param cmd_list: Commands list
+        """
+        for cmd in cmd_list:
+            result = self.execute(cmd, sudo=True, verbose=True)
+            self._print_log(result)
+
+    def execute_cmd_list(self, cmd_list):
+        """
+        Execute command list without sudo.
+        :param cmd_list: Commands list
+        """
+        for cmd in cmd_list:
+            result = self.execute(cmd, verbose=True)
+            self._print_log(result)
+
     def _print_log(self, msg=''):
-        """print out the log message"""
+        """
+        Print out the log message
+        :param msg: message
+        """
         sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
