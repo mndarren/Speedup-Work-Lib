@@ -11,8 +11,14 @@ Collect File action tools
 import os
 import re
 import stat
+import sys
+from datetime import datetime
+from pathlib import Path
+from typing import List
 
 PERCENT_RE = re.compile(r'%(.+?)%')
+FILE_TYPE_RE = re.compile(r'.*(\..+)$')
+TIME_FORMAT = '%H:%M:%S'
 
 
 class FileTool:
@@ -22,6 +28,7 @@ class FileTool:
     2. Unit to Dos format conversion
     3. Dos ot Unit format conversion.
     """
+
     def load_env(self, full_path):
         """
         Load environment vars by reading a config text file
@@ -94,3 +101,57 @@ class FileTool:
             raise Exception(str(e))
         with open(filename, 'wb') as out_fh:
             out_fh.write(text)
+
+    def _print_log(self, msg=''):
+        """print out the log message"""
+        sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
+
+    def unit2dos_recurs(self, root_path, file_types: [List] = None):
+        """
+        Convert Unix to Dos format recursively
+        :param root_path: Passing in path for recursive conversion
+        :param file_types: Limit files with specific types to be converted
+        """
+        # walk through all directories and files
+        count = 0
+        for dir_name, subdir_list, file_list in os.walk(root_path):
+            for fname in file_list:
+                if file_types:
+                    file_type = re.search(FILE_TYPE_RE, fname).group(1)
+                    if file_type in file_types:
+                        path_file = Path(dir_name).joinpath(fname)
+                        self.unix2dos(path_file)
+                        self._print_log(f"Converted {path_file}")
+                        count += 1
+                else:
+                    path_file = Path(dir_name).joinpath(fname)
+                    self.unix2dos(path_file)
+                    self._print_log(f"Converted {path_file}")
+                    count += 1
+
+        self._print_log(f"Converted {count} files.")
+
+    def dos2unix_recurs(self, root_path, file_types: [List] = None):
+        """
+        Convert Dos to Unix format recursively
+        :param root_path: Passing in path for recursive conversion
+        :param file_types: Limit files with specific types to be converted
+        """
+        # walk through all directories and files
+        count = 0
+        for dir_name, subdir_list, file_list in os.walk(root_path):
+            for fname in file_list:
+                if file_types:
+                    file_type = re.search(FILE_TYPE_RE, fname).group(1)
+                    if file_type in file_types:
+                        path_file = Path(dir_name).joinpath(fname)
+                        self.dos2unix(path_file)
+                        self._print_log(f"Converted {path_file}")
+                        count += 1
+                else:
+                    path_file = Path(dir_name).joinpath(fname)
+                    self.dos2unix(path_file)
+                    self._print_log(f"Converted {path_file}")
+                    count += 1
+
+        self._print_log(f"Converted {count} files.")

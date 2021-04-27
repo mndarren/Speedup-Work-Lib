@@ -9,3 +9,5 @@
 Collect functionalities for speedup work
 """
 
+__version__ = '0.1.0'
+__release__ = '0.1.0'

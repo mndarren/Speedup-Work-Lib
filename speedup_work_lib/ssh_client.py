@@ -38,7 +38,7 @@ class SshClient:
 
     def execute(self, command, sudo=False, verbose=False):
         if verbose:
-            self.print_log(f"Running command: [{command}]")
+            self._print_log(f"Running command: [{command}]")
         feed_password = False
         if sudo and self.username != "root":
             command = "sudo -S -p '' %s" % command
@@ -51,6 +51,6 @@ class SshClient:
                 'err': stderr.readlines(),
                 'retval': stdout.channel.recv_exit_status()}
 
-    def print_log(self, msg=''):
+    def _print_log(self, msg=''):
         """print out the log message"""
         sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
