@@ -34,7 +34,7 @@ class SimpleLog:
         :param msg: Log message
         """
         caller = getframeinfo(stack()[1][0])
-        sys.stdout.write(f"[{self._curr_time()}][{caller.function - caller.lineno}]: {msg}\n")
+        sys.stdout.write(f"[{self._curr_time()}][{caller.function} - {caller.lineno}]: {msg}\n")
 
     def stop_log(self):
         """print out duration time"""
@@ -52,4 +52,4 @@ class SimpleLog:
         """
         :return: break section lines
         """
-        return f"{'-' * 120}\n"
+        sys.stdout.write(f"{'-' * 120}\n")
