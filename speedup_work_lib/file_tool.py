@@ -120,12 +120,14 @@ class FileTool:
         for dir_name, subdir_list, file_list in os.walk(root_path):
             for fname in file_list:
                 if file_types:
-                    file_type = re.search(FILE_TYPE_RE, fname).group(1)
-                    if file_type in file_types:
-                        path_file = Path(dir_name).joinpath(fname)
-                        self.unix2dos(path_file)
-                        self._print_log(f"Converted {path_file}")
-                        count += 1
+                    find_type = re.search(FILE_TYPE_RE, fname)
+                    if find_type:
+                        file_type = find_type.group(1)
+                        if file_type in file_types:
+                            path_file = Path(dir_name).joinpath(fname)
+                            self.unix2dos(path_file)
+                            self._print_log(f"Converted {path_file}")
+                            count += 1
                 else:
                     path_file = Path(dir_name).joinpath(fname)
                     self.unix2dos(path_file)
@@ -145,12 +147,14 @@ class FileTool:
         for dir_name, subdir_list, file_list in os.walk(root_path):
             for fname in file_list:
                 if file_types:
-                    file_type = re.search(FILE_TYPE_RE, fname).group(1)
-                    if file_type in file_types:
-                        path_file = Path(dir_name).joinpath(fname)
-                        self.dos2unix(path_file)
-                        self._print_log(f"Converted {path_file}")
-                        count += 1
+                    find_type = re.search(FILE_TYPE_RE, fname)
+                    if find_type:
+                        file_type = find_type.group(1)
+                        if file_type in file_types:
+                            path_file = Path(dir_name).joinpath(fname)
+                            self.dos2unix(path_file)
+                            self._print_log(f"Converted {path_file}")
+                            count += 1
                 else:
                     path_file = Path(dir_name).joinpath(fname)
                     self.dos2unix(path_file)
