@@ -122,3 +122,20 @@ class SshClient:
         finally:
             ftp.close()
             return result
+
+    def create_file_by_content(self, content, to_file):
+        """
+        Create a file with giving content.
+        :param content: content of file
+        :param to_file: The file to be created
+        :return:
+        """
+        ftp = self.client.open_sftp()
+        try:
+            edit_file = ftp.file(to_file, 'w')
+            edit_file.write(f"{content}")
+            edit_file.flush()
+            self._print_log(f"The file [{to_file}] was just created.")
+        finally:
+            ftp.close()
+
