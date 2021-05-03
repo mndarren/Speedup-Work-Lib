@@ -13,7 +13,7 @@ from paramiko.auth_handler import AuthenticationException, SSHException
 
 import paramiko
 
-TIME_FORMAT = '%H:%M:%S'
+TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
 
 
 class SshClient:
@@ -24,6 +24,7 @@ class SshClient:
         self.username = username
         self.password = password
         self.client = paramiko.SSHClient()
+        self.iface_ip = {}
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         if key is not None:
             key = paramiko.RSAKey.from_private_key(StringIO(key), password=passphrase)
@@ -31,7 +32,7 @@ class SshClient:
             self.client.connect(host, port, username=username, password=password, pkey=key, timeout=self.TIMEOUT)
         except AuthenticationException as e:
             self._print_log(f"Authentication failed: did you remember to create an SSH key? {e}")
-            raise str(e)
+            # raise str(e)
         except Exception as e:
             raise str(e)
 
@@ -138,4 +139,28 @@ class SshClient:
             self._print_log(f"The file [{to_file}] was just created.")
         finally:
             ftp.close()
+
+    def set_iface_ip(self):
+        """
+        Get dict {iface: ip}
+        :return: dict {iface: ip}
+        """
+        cmd = "/sbin/ip -4 -o a | cut -d ' ' -f 2,7 | cut -d '/' -f 1"
+        result = self.execute(cmd)
+        for n_ip in result['out']:
+            k, v = n_ip.split(' ')
+            self.iface_ip[k] = v.replace('\n', '')
+        return self.iface_ip
+
+    def get_iface(self, ip_addr):
+        """
+        Get interface name given ip address
+        :param ip_addr: input ip address
+        :return: interface name if exist, otherwise None
+        """
+        self.set_iface_ip()
+        for k, v in self.iface_ip.items():
+            if v == ip_addr:
+                return k
+        return None
 

@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 from inspect import getframeinfo, stack
 
-TIME_FORMAT = '%H:%M:%S'
+TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
 
 
 class SimpleLog:

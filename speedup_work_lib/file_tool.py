@@ -18,7 +18,7 @@ from typing import List
 
 PERCENT_RE = re.compile(r'%(.+?)%')
 FILE_TYPE_RE = re.compile(r'.*(\..+)$')
-TIME_FORMAT = '%H:%M:%S'
+TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
 
 
 class FileTool:
