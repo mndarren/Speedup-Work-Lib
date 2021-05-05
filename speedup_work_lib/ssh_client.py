@@ -183,3 +183,29 @@ class SshClient:
             raise str(e)
         except Exception as e:
             raise str(e)
+
+    def does_dir_exist(self, dir_t):
+        """
+        Checi if the test directory exists
+        :param dir_t: passing in directory to test
+        :return: True if exists, False if not.
+        """
+        cmd = f'test -d {dir_t} && echo $?'
+        result = self.execute(cmd)['out']
+        if result and result[0].strip() == '0':
+            return True
+        else:
+            return False
+
+    def does_file_exist(self, file_t):
+        """
+        Checi if the test file exists
+        :param file_t: passing in file to test
+        :return: True if exists, False if not.
+        """
+        cmd = f'test -f {file_t} && echo $?'
+        result = self.execute(cmd)['out']
+        if result and  result[0].strip() == '0':
+            return True
+        else:
+            return False
