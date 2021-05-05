@@ -16,7 +16,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import List
 
-import speedup_config
+TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
+PERCENT_RE = re.compile(r'%(.+?)%')
+FILE_TYPE_RE = re.compile(r'.*(\..+)$')
 
 
 class FileTool:
@@ -105,7 +107,7 @@ class FileTool:
 
     def _print_log(self, msg=''):
         """print out the log message"""
-        sys.stdout.write(f"[{datetime.now().strftime(speedup_config.TIME_FORMAT)}]: {msg}\n")
+        sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
 
     def unit2dos_recurs(self, root_path, file_types: [List] = None):
         """
@@ -118,7 +120,7 @@ class FileTool:
         for dir_name, subdir_list, file_list in os.walk(root_path):
             for fname in file_list:
                 if file_types:
-                    find_type = re.search(speedup_config.FILE_TYPE_RE, fname)
+                    find_type = re.search(FILE_TYPE_RE, fname)
                     if find_type:
                         file_type = find_type.group(1)
                         if file_type in file_types:
@@ -145,7 +147,7 @@ class FileTool:
         for dir_name, subdir_list, file_list in os.walk(root_path):
             for fname in file_list:
                 if file_types:
-                    find_type = re.search(speedup_config.FILE_TYPE_RE, fname)
+                    find_type = re.search(FILE_TYPE_RE, fname)
                     if find_type:
                         file_type = find_type.group(1)
                         if file_type in file_types:

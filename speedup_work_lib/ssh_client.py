@@ -14,7 +14,7 @@ import paramiko
 from paramiko.auth_handler import AuthenticationException
 from scp import SCPClient, SCPException
 
-import speedup_config
+TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
 
 
 class SshClient:
@@ -91,7 +91,7 @@ class SshClient:
         Print out the log message
         :param msg: message
         """
-        sys.stdout.write(f"[{datetime.now().strftime(speedup_config.TIME_FORMAT)}]: {msg}\n")
+        sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
 
     def append_line_to_file(self, line, to_file):
         """
