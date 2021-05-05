@@ -9,11 +9,12 @@ This python script is base script to connect Linux server by SSH.
 import sys
 from datetime import datetime
 from io import StringIO
-from paramiko.auth_handler import AuthenticationException, SSHException
 
 import paramiko
+from paramiko.auth_handler import AuthenticationException
+from scp import SCPClient, SCPException
 
-TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
+import speedup_config
 
 
 class SshClient:
@@ -24,12 +25,14 @@ class SshClient:
         self.username = username
         self.password = password
         self.client = paramiko.SSHClient()
+        self.scp = None
         self.iface_ip = {}
         self.client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         if key is not None:
             key = paramiko.RSAKey.from_private_key(StringIO(key), password=passphrase)
         try:
             self.client.connect(host, port, username=username, password=password, pkey=key, timeout=self.TIMEOUT)
+            self.scp = SCPClient(self.client.get_transport())
         except AuthenticationException as e:
             self._print_log(f"Authentication failed: did you remember to create an SSH key? {e}")
             # raise str(e)
@@ -39,6 +42,8 @@ class SshClient:
     def close(self):
         """Close client."""
         if self.client is not None:
+            if self.scp:
+                self.scp.close()
             self.client.close()
             self.client = None
 
@@ -86,7 +91,7 @@ class SshClient:
         Print out the log message
         :param msg: message
         """
-        sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
+        sys.stdout.write(f"[{datetime.now().strftime(speedup_config.TIME_FORMAT)}]: {msg}\n")
 
     def append_line_to_file(self, line, to_file):
         """
@@ -164,3 +169,17 @@ class SshClient:
                 return k
         return None
 
+    def scp_folder(self, from_f, to_f):
+        """
+        Scp the whole folder from from_f to to_f.
+        :param from_f: from folder path
+        :param to_f: to folder path
+        :return:
+        """
+        try:
+            self._print_log(f"Running: [scp {from_f} {to_f}]")
+            self.scp.put(from_f, recursive=True, remote_path=to_f)
+        except SCPException as e:
+            raise str(e)
+        except Exception as e:
+            raise str(e)

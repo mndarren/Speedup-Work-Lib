@@ -10,7 +10,7 @@ import sys
 from datetime import datetime
 from inspect import getframeinfo, stack
 
-TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
+import speedup_config
 
 
 class SimpleLog:
@@ -46,7 +46,7 @@ class SimpleLog:
         """
         return: current time
         """
-        return datetime.now().strftime(TIME_FORMAT)
+        return datetime.now().strftime(speedup_config.TIME_FORMAT)
 
     def break_section(self):
         """
