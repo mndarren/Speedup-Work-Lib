@@ -19,7 +19,7 @@ TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
 
 class SshClient:
     """A wrapper of paramiko.SSHClient"""
-    TIMEOUT = 10
+    TIMEOUT = 60
 
     def __init__(self, host, port, username, password, key=None, passphrase=None):
         self.username = username
@@ -101,17 +101,14 @@ class SshClient:
         """
         ftp = self.client.open_sftp()
         try:
-            if not self.is_line_to_file(line, to_file):
-                edit_file = ftp.file(to_file, 'a+')
-                edit_file.write(f"\n{line}\n")
-                edit_file.flush()
-                self._print_log(f"Just added line [{line}] in file [{to_file}]")
-            else:
-                self._print_log(f"The line [{line}] is in file [{to_file}] already.")
+            edit_file = ftp.file(to_file, 'a+')
+            edit_file.write(f"\n{line}\n")
+            edit_file.flush()
+            self._print_log(f"Just added line [{line}] in file [{to_file}]")
         finally:
             ftp.close()
 
-    def is_line_to_file(self, line, to_file):
+    def is_line_in_file(self, line, to_file):
         """
         Append a line in a remote file
         :param line: A line of string
