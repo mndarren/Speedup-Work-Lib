@@ -37,6 +37,7 @@ class SshClient:
             self._print_log(f"Authentication failed: did you remember to create an SSH key? {e}")
             # raise str(e)
         except Exception as e:
+            self._print_log(f"ERROR: Could be wrong User Id, Password and IP.")
             raise str(e)
 
     def close(self):
@@ -202,7 +203,7 @@ class SshClient:
         """
         cmd = f'test -f {file_t} && echo $?'
         result = self.execute(cmd)['out']
-        if result and  result[0].strip() == '0':
+        if result and result[0].strip() == '0':
             return True
         else:
             return False
