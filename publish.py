@@ -11,6 +11,7 @@ Publish this speedup-work-lib to pypi.
 import os
 import re
 import stat
+import subprocess
 import sys
 from codecs import open
 from datetime import datetime
@@ -35,7 +36,7 @@ class PublishPypi:
         super().__init__(*args, **kwargs)
         self.key_u = b'mndarren'
         self.key_p = b'JoseAiFeng2!'
-        publish_key = 'mndarren\nJoseAiFeng2!'
+        self.publish_key = 'mndarren\nJoseAiFeng2!'
 
     def run(self):
         """This is the main function."""
@@ -88,6 +89,7 @@ class PublishPypi:
         """Publish lib to pypi"""
         self._print_log(f"Start building package")
         # Build package
+        self.increment_version()
         build_package_cmds = [
             'pip freeze > requirements.txt',
             'python setup.py sdist bdist_wheel',
@@ -95,29 +97,24 @@ class PublishPypi:
         for cmd in build_package_cmds:
             call(cmd, shell=True)
 
-        self._print_log(f"Start Checking package.")
         # Check package
+        self._print_log(f"Start Checking package.")
         check_cmd = 'twine check dist/*'
         p = Popen(check_cmd, stdin=PIPE, stdout=PIPE, shell=True)
         count = p.stdout.read().decode().count('PASSED')
         p.terminate()
 
-        self._print_log(f"Start publishing package.")
         # Publish package
+        self._print_log(f"Start publishing package.")
         if count == 2:
-            self.increment_version()
             publish_cmds = [
-                'twine upload --repository-url https://test.pypi.org/legacy/ dist/*',
-                'twine upload dist/*',
+                'twine upload -r pypitest dist/*',
+                'twine upload -r pypi dist/*',
             ]
             for cmd in publish_cmds:
-                p = Popen(cmd, stdout=PIPE, stdin=PIPE, shell=True)
-                p.stdin.write(self.key_u)
-                sleep(1)
-                p.stdin.write(self.key_p)
-                # out, _ = p.communicate(input=self.publish_key.encode())
-                # sys.stdout.write(out.decode())
-                p.terminate()
+                self._print_log(f"Start running {cmd}")
+                subprocess.call(cmd)
+
         else:
             self._print_log(f"Failed to check dist/ packages.")
 
