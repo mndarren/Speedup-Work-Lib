@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-.. current_module:: publish.py
+.. current_module:: publish_pypi.py
 .. created_by:: Darren Xie
 .. created_on:: 05/06/2021
 
