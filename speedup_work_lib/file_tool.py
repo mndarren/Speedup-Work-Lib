@@ -12,6 +12,7 @@ import os
 import re
 import stat
 import sys
+from codecs import open
 from datetime import datetime
 from pathlib import Path
 from typing import List
@@ -162,3 +163,27 @@ class FileTool:
                     count += 1
 
         self._print_log(f"Converted {count} files.")
+
+    def update_line_in_file(self, old_line, new_line, to_file):
+        """
+        Update a line in a file.
+        :param old_line: the target line in to_file to be updated
+        :param new_line: the new line
+        :param to_file: the target file
+        """
+        try:
+            with open(str(to_file), 'r') as in_fh, \
+                    open(f"{str(to_file)}_r", 'w') as out_fh:
+                content = in_fh.read()
+                if old_line in content:
+                    new_content = content.replace(old_line, new_line)
+                    out_fh.write(new_content)
+                else:
+                    self._print_log(f"Could not fine {old_line}")
+
+            os.unlink(to_file)
+            os.rename(f"{str(to_file)}_r", to_file)
+        except IOError as e:
+            self._print_log(f"Could open file: {to_file}")
+        except Exception as e:
+            self._print_log(f"Error: {str(e)}")
