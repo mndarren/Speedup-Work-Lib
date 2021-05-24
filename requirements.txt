@@ -31,7 +31,6 @@ requests-toolbelt==0.9.1
 rfc3986==1.4.0
 scp==0.13.3
 six==1.15.0
-speedup-work-lib @ file:///C:/Users/XieZ/source/repos/Speedup-Work-Lib/dist/speedup_work_lib-0.1.0.tar.gz
 toml==0.10.2
 tqdm==4.60.0
 twine==3.4.1

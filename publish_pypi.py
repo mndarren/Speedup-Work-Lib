@@ -33,6 +33,8 @@ class PublishPypi:
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.orig_content_ver = ''
+        self.version_file = Path(__file__).parent.joinpath('speedup_work_lib/__init__.py')
 
     def run(self):
         """This is the main function."""
@@ -87,11 +89,14 @@ class PublishPypi:
         # Build package
         self.increment_version()
         build_package_cmds = [
-            'pip freeze > requirements.txt',
+            # 'pip freeze > requirements.txt',
             'python setup.py sdist bdist_wheel',
         ]
-        for cmd in build_package_cmds:
-            call(cmd, shell=True)
+        try:
+            for cmd in build_package_cmds:
+                call(cmd, shell=True)
+        except:
+            self.decrement_version()
 
         # Check package
         self._print_log(f"Start Checking package.")
@@ -107,10 +112,12 @@ class PublishPypi:
                 'twine upload -r pypitest dist/*',
                 'twine upload -r pypi dist/*',
             ]
-            for cmd in publish_cmds:
-                self._print_log(f"Start running {cmd}")
-                subprocess.call(cmd)
-
+            try:
+                for cmd in publish_cmds:
+                    self._print_log(f"Start running {cmd}")
+                    subprocess.call(cmd)
+            except:
+                self.decrement_version()
         else:
             self._print_log(f"Failed to check dist/ packages.")
 
@@ -121,10 +128,10 @@ class PublishPypi:
         if minor number == 10, the major number +1.
         """
         VERSION_RE = re.compile(r'.*(\d+\.\d+\.\d+).*')
-        version_file = Path(__file__).parent.joinpath('speedup_work_lib/__init__.py')
-        with open(str(version_file), 'r') as in_fh,\
-                open(f"{str(version_file)}_r", 'w') as out_fh:
+        with open(str(self.version_file), 'r') as in_fh,\
+                open(f"{str(self.version_file)}_r", 'w') as out_fh:
             content = in_fh.read()
+            self.orig_content_ver = content
             orig_v_num = re.search(VERSION_RE, content).group(1)
             v_num = orig_v_num.split('.')
             new_build_num = int(v_num[2]) + 1
@@ -142,8 +149,18 @@ class PublishPypi:
 
             out_fh.write(new_content)
 
-        os.unlink(version_file)
-        os.rename(f"{str(version_file)}_r", version_file)
+        os.unlink(self.version_file)
+        os.rename(f"{str(self.version_file)}_r", self.version_file)
+
+    def decrement_version(self):
+        """
+        Decrement version. Go back to the original version.
+        """
+        with open(f"{str(self.version_file)}_r", 'w') as out_fh:
+            out_fh.write(self.orig_content_ver)
+
+        os.unlink(self.version_file)
+        os.rename(f"{str(self.version_file)}_r", self.version_file)
 
 
 if __name__ == "__main__":
