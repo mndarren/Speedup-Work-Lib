@@ -19,7 +19,7 @@ TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
 
 class SshClient:
     """A wrapper of paramiko.SSHClient"""
-    TIMEOUT = 60
+    TIMEOUT = 180  # 3 minutes
 
     def __init__(self, host, port, username, password, key=None, passphrase=None):
         self.username = username
@@ -32,7 +32,7 @@ class SshClient:
             key = paramiko.RSAKey.from_private_key(StringIO(key), password=passphrase)
         try:
             self.client.connect(host, port, username=username, password=password, pkey=key, timeout=self.TIMEOUT)
-            self.scp = SCPClient(self.client.get_transport())
+            self.scp = SCPClient(self.client.get_transport(), socket_timeout=self.TIMEOUT)
         except AuthenticationException as e:
             self._print_log(f"Authentication failed: did you remember to create an SSH key? {e}")
             # raise str(e)
