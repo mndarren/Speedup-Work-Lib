@@ -127,6 +127,23 @@ class SshClient:
             ftp.close()
             return result
 
+    def is_file_empty(self, check_f):
+        """
+        Check if the passing in file is empty
+        :param check_f: passing in file
+        :return: True if empty, otherwise False
+        """
+        ftp = self.client.open_sftp()
+        result = False
+        try:
+            edit_file = ftp.open(check_f, mode='r')
+            edit_file.prefetch()  # increase the read speed
+            if not edit_file.read():
+                result = True
+        finally:
+            ftp.close()
+            return result
+
     def create_file_by_content(self, content, to_file):
         """
         Create a file with giving content.
