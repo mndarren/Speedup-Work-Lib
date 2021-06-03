@@ -164,22 +164,22 @@ class FileTool:
 
         self._print_log(f"Converted {count} files.")
 
-    def update_line_in_file(self, old_line, new_line, to_file):
+    def update_string_in_file(self, old_string, new_string, to_file):
         """
         Update a line in a file.
-        :param old_line: the target line in to_file to be updated
-        :param new_line: the new line
+        :param old_string: the target string in to_file to be updated
+        :param new_string: the new string
         :param to_file: the target file
         """
         try:
             with open(str(to_file), 'r') as in_fh, \
                     open(f"{str(to_file)}_r", 'w') as out_fh:
                 content = in_fh.read()
-                if old_line in content:
-                    new_content = content.replace(old_line, new_line)
+                if old_string in content:
+                    new_content = content.replace(old_string, new_string)
                     out_fh.write(new_content)
                 else:
-                    self._print_log(f"Could not fine {old_line}")
+                    self._print_log(f"Could not fine {old_string}")
 
             os.unlink(to_file)
             os.rename(f"{str(to_file)}_r", to_file)
