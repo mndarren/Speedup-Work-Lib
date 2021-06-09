@@ -16,6 +16,7 @@ from codecs import open
 from datetime import datetime
 from pathlib import Path
 from typing import List
+from shutil import rmtree
 
 TIME_FORMAT = '%m/%d/%Y %H:%M:%S'
 PERCENT_RE = re.compile(r'%(.+?)%')
@@ -187,3 +188,11 @@ class FileTool:
             self._print_log(f"Could open file: {to_file}")
         except Exception as e:
             self._print_log(f"Error: {str(e)}")
+
+    def remove_folder(self, f_path):
+        """
+        Remove folder
+        :param f_path: passing in folder
+        """
+        if Path(f_path).exists():
+            rmtree(f_path, onerror=self.on_rm_error)
