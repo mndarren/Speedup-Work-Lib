@@ -39,9 +39,9 @@ steps:
 
 - task: TwineAuthenticate@1
     inputs:
-    # In this case, name of the feed is 'myTestFeed' in the project 'myTestProject'.
-    # Project is needed because the feed is project scoped.
-    artifactFeed: Speedup_Work_Lib/MIS_Python_Feed
+      # In this case, name of the feed is 'myTestFeed' in the project 'myTestProject'.
+      # Project is needed because the feed is project scoped.
+      artifactFeed: Speedup_Work_Lib/MIS_Python_Feed
     displayName: 'Twine Authenticate'
 
 # Use command line script to 'twine upload', use -r to pass the repository name and
