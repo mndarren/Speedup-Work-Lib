@@ -25,6 +25,25 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
+    python -m pip install --upgrade pip setuptools wheel twine
+  displayName: 'Install tools'
+
+- script: |
     pip install pytest pytest-azurepipelines
     pytest
   displayName: 'pytest'
+
+# Build the python distribution from source
+- script: |
+    python setup.py bdist_wheel
+
+- task: TwineAuthenticate@1
+    displayName: 'Twine Authenticate'
+    inputs:
+    # In this case, name of the feed is 'myTestFeed' in the project 'myTestProject'.
+    # Project is needed because the feed is project scoped.
+    artifactFeed: Speedup_Work_Lib/MIS_Python_Feed
+
+# Use command line script to 'twine upload', use -r to pass the repository name and --config-file to pass the environment variable set by the authenticate task.
+- script: |
+    python -m twine upload -r MIS_Python_Feed --config-file $(PYPIRC_PATH) dist/*.whl
