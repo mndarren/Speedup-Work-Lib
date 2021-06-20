@@ -26,17 +26,19 @@ class MyTestCase(unittest.TestCase):
         self.create_unix_file()
 
     def tearDown(self) -> None:
-        unlink(self.test_dos_path_file)
-        unlink(self.test_unix_path_file)
+        if Path(self.test_dos_path_file).exists:
+            unlink(self.test_dos_path_file)
+        if Path(self.test_unix_path_file).exists:
+            unlink(self.test_unix_path_file)
 
     def test_dos2unix(self):
-        with open(self.test_dos_filename, 'rb') as in_fh:
+        with open(self.test_dos_path_file, 'rb') as in_fh:
             last_char = in_fh.read()[-2:]
             self.assertEqual(last_char, b'\r\n')
 
         FileTool().dos2unix(self.test_dos_path_file)
 
-        with open(self.test_dos_filename, 'rb') as in_fh:
+        with open(self.test_dos_path_file, 'rb') as in_fh:
             last_char = in_fh.read()[-2:]
             self.assertEqual(last_char, b'.\n')
 
@@ -53,13 +55,13 @@ class MyTestCase(unittest.TestCase):
         file_tool = FileTool()
         file_tool.unix2dos(self.test_unix_path_file)
 
-        with open(self.test_unix_filename, 'rb') as in_fh:
+        with open(self.test_unix_path_file, 'rb') as in_fh:
             last_char = in_fh.read()[-2:]
             self.assertEqual(last_char, b'\r\n')
 
     def create_unix_file(self):
         content = b'Test line with dos.\n'
-        with open(self.test_unix_filename, 'wb') as out:
+        with open(self.test_unix_path_file, 'wb') as out:
             out.write(content)
 
 
