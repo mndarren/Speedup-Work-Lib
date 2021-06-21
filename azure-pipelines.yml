@@ -19,6 +19,11 @@ steps:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
 
+- task: PythonLibDeployment@0
+  inputs:
+    azureSubscription: 'Pypi_Conn, Pypi_Test_Conn'
+  displayName: 'Azure Service Connection List'
+
 - script: |
     python -m pip install --upgrade pip
     pip install -r requirements.txt
@@ -41,12 +46,12 @@ steps:
   inputs:
     # In this case, name of the feed is 'myTestFeed' in the project 'myTestProject'.
     # Project is needed because the feed is project scoped.
-    # artifactFeed: Speedup_Work_Lib/MIS_Python_Feed
-    externalFeeds: 'Pypi_Conn, Pypi_Test_Conn'
+#    artifactFeed: Speedup_Work_Lib/MIS_Python_Feed
+    externalFeeds: Speedup_Work_Lib/PypiFeed
   displayName: 'Twine Authenticate'
 
 # Use command line script to 'twine upload', use -r to pass the repository name and
 # --config-file to pass the environment variable set by the authenticate task.
 - script: |
 #    python -m twine upload -r MIS_Python_Feed --config-file $(PYPIRC_PATH) dist/*.whl
-    python -m twine upload --config-file $(PYPIRC_PATH) dist/*
+    python -m twine upload -r PypiFeed --config-file $(PYPIRC_PATH) dist/*.whl
