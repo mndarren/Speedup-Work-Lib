@@ -53,6 +53,6 @@ jobs:
   # --config-file to pass the environment variable set by the authenticate task.
   - script: |
       cat $(PYPIRC_PATH)
-      python -m twine upload -r 'pypitest' --config-file $(PYPIRC_PATH) dist/*
+      python -m twine upload -r 'speedup-work-lib' --config-file $(PYPIRC_PATH) dist/*
   #    python -m twine upload -r MIS_Python_Feed --config-file $(PYPIRC_PATH) dist/*
     displayName: 'Deploy package'
