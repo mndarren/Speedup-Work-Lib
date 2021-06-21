@@ -42,7 +42,7 @@ steps:
     # In this case, name of the feed is 'myTestFeed' in the project 'myTestProject'.
     # Project is needed because the feed is project scoped.
     # artifactFeed: Speedup_Work_Lib/MIS_Python_Feed
-    externalFeeds: 'Pypi_Conn'
+    externalFeeds: 'Pypi_Conn, Pypi_Test_Conn'
   displayName: 'Twine Authenticate'
 
 # Use command line script to 'twine upload', use -r to pass the repository name and
