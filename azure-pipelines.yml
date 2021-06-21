@@ -7,7 +7,7 @@ trigger:
 - main
 
 jobs:
-- job: Speedup_Work_Lib_Pipeline
+- job: run pipeline
   timeoutInMinutes: 5 # how long to run the job before automatically cancelling
   cancelTimeoutInMinutes: 1 # how much time to give 'run always even if cancelled tasks' before stopping them
   pool:
@@ -46,13 +46,13 @@ jobs:
       # In this case, name of the feed is 'myTestFeed' in the project 'myTestProject'.
       # Project is needed because the feed is project scoped.
   #    artifactFeed: Speedup_Work_Lib/MIS_Python_Feed
-      pythonUploadServiceConnection: pypi
+      pythonUploadServiceConnection: pypitest
     displayName: 'Twine Authenticate'
 
   # Use command line script to 'twine upload', use -r to pass the repository name and
   # --config-file to pass the environment variable set by the authenticate task.
   - script: |
       cat $(PYPIRC_PATH)
-      python -m twine upload -r 'pypi' --config-file $(PYPIRC_PATH) dist/*
+      python -m twine upload -r 'pypitest' --config-file $(PYPIRC_PATH) dist/*
   #    python -m twine upload -r MIS_Python_Feed --config-file $(PYPIRC_PATH) dist/*
     displayName: 'Deploy package'
