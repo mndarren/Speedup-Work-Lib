@@ -21,8 +21,8 @@ steps:
 
 - task: PythonLibDeployment@1
   inputs:
-    azureSubscription: 'Pypi_Conn, Pypi_Test_Conn'
-  displayName: 'Azure Service Connection List'
+    azureSubscription: 'Pypi_Conn'
+  displayName: 'Azure Service Connection'
 
 - script: |
     python -m pip install --upgrade pip
