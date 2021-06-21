@@ -8,8 +8,8 @@ trigger:
 
 jobs:
 - job: runner
-  timeoutInMinutes: 10 # how long to run the job before automatically cancelling
-  cancelTimeoutInMinutes: 2 # how much time to give 'run always even if cancelled tasks' before stopping them
+  timeoutInMinutes: 5 # how long to run the job before automatically cancelling
+  cancelTimeoutInMinutes: 1 # how much time to give 'run always even if cancelled tasks' before stopping them
   pool:
     vmImage: ubuntu-latest
   strategy:
@@ -52,6 +52,7 @@ jobs:
   # Use command line script to 'twine upload', use -r to pass the repository name and
   # --config-file to pass the environment variable set by the authenticate task.
   - script: |
+      cat $(PYPIRC_PATH)
       python -m twine upload -r 'pypi' --config-file $(PYPIRC_PATH) dist/*
   #    python -m twine upload -r MIS_Python_Feed --config-file $(PYPIRC_PATH) dist/*
     displayName: 'Deploy package'
