@@ -10,7 +10,7 @@ import speedup_work_lib
 # Get long description from relevant file
 here = Path(__file__).absolute().parent
 with open(here.joinpath('README.md'), 'r', encoding='utf-8') as in_fh:
-    long_desc = in_fh.read()
+    long_desc = in_fh.read().replace('`', '')
 
 version = speedup_work_lib.__version__
 
@@ -25,6 +25,7 @@ setup(
     packages=find_packages(exclude=["tests", "test*"]),
     include_package_data=True,
     long_description=long_desc,
+    long_description_content_type="text/markdown",
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
