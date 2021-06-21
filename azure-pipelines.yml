@@ -19,7 +19,7 @@ steps:
     versionSpec: '$(python.version)'
   displayName: 'Use Python $(python.version)'
 
-- task: PythonLibDeployment@0
+- task: PythonLibDeployment@1
   inputs:
     azureSubscription: 'Pypi_Conn, Pypi_Test_Conn'
   displayName: 'Azure Service Connection List'
