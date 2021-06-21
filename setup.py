@@ -29,7 +29,6 @@ setup(
     classifiers=[
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.9",
-        "License :: OSI Approved :: Apache Software License :: 2.0",
     ],
     python_require='>=3.9',
     install_requires=[
