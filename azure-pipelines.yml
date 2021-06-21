@@ -10,15 +10,15 @@ jobs:
 - job: setup_env
   pool:
     vmImage: ubuntu-latest
-  strategy:
-    matrix:
-      Python37:
-        python.version: '3.7'
 
 - job: runner
   timeoutInMinutes: 5 # how long to run the job before automatically cancelling
   cancelTimeoutInMinutes: 1 # how much time to give 'run always even if cancelled tasks' before stopping them
   dependsOn: setup_env
+  strategy:
+    matrix:
+      Python37:
+        python.version: '3.7'
   steps:
   - task: UsePythonVersion@0
     displayName: 'Use Python $(python.version)'
