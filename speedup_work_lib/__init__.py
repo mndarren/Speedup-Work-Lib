@@ -9,8 +9,8 @@
 Collect functionalities for speedup work
 """
 
-__version__ = '0.2.10'
-__release__ = '0.2.10'
+__version__ = '0.2.11'
+__release__ = '0.2.11'
 
 __all__ = [
     'file_tool',
