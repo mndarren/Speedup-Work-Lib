@@ -160,6 +160,21 @@ class SshClient:
         finally:
             ftp.close()
 
+    def read_content_from_file(self, from_file):
+        """
+        Read content from a file
+        :param from_file: the file to remove line
+        """
+        ftp = self.client.open_sftp()
+        content = ''
+        try:
+            edit_file = ftp.open(from_file, mode='r')
+            edit_file.prefetch()  # increase the read speed
+            content = edit_file.read().decode()
+        finally:
+            ftp.close()
+            return content
+
     def set_iface_ip(self):
         """
         Get dict {iface: ip}
