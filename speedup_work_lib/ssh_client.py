@@ -214,6 +214,34 @@ class SshClient:
         except Exception as e:
             raise str(e)
 
+    def scp_file_pc2got(self, from_f, to_f):
+        """
+        Scp file from from_f to to_f.
+        :param from_f: from file path
+        :param to_f: to file path
+        """
+        try:
+            self._print_log(f"Running: [scp {from_f} {to_f}]")
+            self.scp.put(from_f, recursive=False, remote_path=to_f)
+        except SCPException as e:
+            raise str(e)
+        except Exception as e:
+            raise str(e)
+
+    def scp_file_got2pc(self, from_f, to_f):
+        """
+        Scp file from from_f to to_f.
+        :param from_f: from file path
+        :param to_f: to file path
+        """
+        try:
+            self._print_log(f"Running: [scp {from_f} {to_f}]")
+            self.scp.get(local_path=to_f, recursive=False, remote_path=from_f)
+        except SCPException as e:
+            raise str(e)
+        except Exception as e:
+            raise str(e)
+
     def does_dir_exist(self, dir_t):
         """
         Checi if the test directory exists
