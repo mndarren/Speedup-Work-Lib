@@ -33,7 +33,7 @@ class FileTool:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def load_env(self, full_path):
+    def load_env(self, full_path):  # pragma: no cover
         """
         Load environment vars by reading a config text file
         :param full_path: Path to the config text file.
@@ -107,7 +107,7 @@ class FileTool:
         with open(filename, 'wb') as out_fh:
             out_fh.write(text)
 
-    def _print_log(self, msg=''):
+    def _print_log(self, msg=''):  # pragma: no cover
         """print out the log message"""
         sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
 
