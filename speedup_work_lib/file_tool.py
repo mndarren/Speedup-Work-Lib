@@ -196,3 +196,23 @@ class FileTool:
         """
         if Path(f_path).exists():
             rmtree(f_path, onerror=self.on_rm_error)
+
+    def cmp_files_by_byte(self, file1path, file2path):
+        """
+        Compare 2 files by byte
+        :param file1path:
+        :param file2path:
+        :return:
+        """
+        try:
+            with open(file1path, 'rb') as in_fh1, open(file2path, 'rb') as in_fh2:
+                content1 = in_fh1.read()
+                content2 = in_fh2.read()
+                if len(content1) > len(content2):
+                    self._print_log(f"{file1path} > {file2path}: {len(content1)-len(content2)}")
+                else:
+                    self._print_log(f"{file2path} > {file1path}: {len(content2)-len(content1)}")
+        except IOError as e:
+            raise IOError(str(e))
+        except Exception as e:
+            raise Exception(str(e))
