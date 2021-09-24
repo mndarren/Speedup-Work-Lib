@@ -160,6 +160,21 @@ class SshClient:
         finally:
             ftp.close()
 
+    def read_content_from_file(self, from_file):
+        """
+        Read content from a file
+        :param from_file: the file to remove line
+        """
+        ftp = self.client.open_sftp()
+        content = ''
+        try:
+            edit_file = ftp.open(from_file, mode='r')
+            edit_file.prefetch()  # increase the read speed
+            content = edit_file.read().decode()
+        finally:
+            ftp.close()
+            return content
+
     def set_iface_ip(self):
         """
         Get dict {iface: ip}
@@ -194,6 +209,34 @@ class SshClient:
         try:
             self._print_log(f"Running: [scp {from_f} {to_f}]")
             self.scp.put(from_f, recursive=True, remote_path=to_f)
+        except SCPException as e:
+            raise str(e)
+        except Exception as e:
+            raise str(e)
+
+    def scp_file_pc2got(self, from_f, to_f):
+        """
+        Scp file from from_f to to_f.
+        :param from_f: from file path
+        :param to_f: to file path
+        """
+        try:
+            self._print_log(f"Running: [scp {from_f} {to_f}]")
+            self.scp.put(from_f, recursive=False, remote_path=to_f)
+        except SCPException as e:
+            raise str(e)
+        except Exception as e:
+            raise str(e)
+
+    def scp_file_got2pc(self, from_f, to_f):
+        """
+        Scp file from from_f to to_f.
+        :param from_f: from file path
+        :param to_f: to file path
+        """
+        try:
+            self._print_log(f"Running: [scp {from_f} {to_f}]")
+            self.scp.get(local_path=to_f, recursive=False, remote_path=from_f)
         except SCPException as e:
             raise str(e)
         except Exception as e:
