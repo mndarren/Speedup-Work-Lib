@@ -22,6 +22,7 @@ class MyTestCase(unittest.TestCase):
     test_unix_path_file = Path(__file__).parent.joinpath(test_unix_filename)
 
     def test_dos2unix(self):
+        self.create_dos_file()
         with open(self.test_dos_path_file, 'rb') as in_fh:
             last_char = in_fh.read()[-2:]
             self.assertEqual(last_char, b'\r\n')
@@ -31,8 +32,10 @@ class MyTestCase(unittest.TestCase):
         with open(self.test_dos_path_file, 'rb') as in_fh:
             last_char = in_fh.read()[-2:]
             self.assertEqual(last_char, b'.\n')
+        unlink(self.test_dos_path_file)
 
     def test_unix2dos(self):
+        self.create_unix_file()
         with open(self.test_unix_path_file, 'rb') as in_fh:
             last_char = in_fh.read()[-2:]
             self.assertEqual(last_char, b'.\n')
@@ -43,8 +46,10 @@ class MyTestCase(unittest.TestCase):
         with open(self.test_unix_path_file, 'rb') as in_fh:
             last_char = in_fh.read()[-2:]
             self.assertEqual(last_char, b'\r\n')
+        unlink(self.test_unix_path_file)
 
     def test_update_string_in_file(self):
+        self.create_unix_file()
         with open(self.test_unix_path_file, 'r') as in_fh:
             content = in_fh.read()
             self.assertTrue('line' in content)
@@ -56,6 +61,7 @@ class MyTestCase(unittest.TestCase):
             content = in_fh.read()
             self.assertTrue('nolie' in content)
             self.assertTrue('line' not in content)
+        unlink(self.test_unix_path_file)
 
     def create_unix_file(self):
         content = b'Test line with dos.\n'
