@@ -17,4 +17,11 @@ twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 twine upload dist/*
 ```
 
+## How to Install Dependencies
+```bash
+py -m venv venv
+.\venv\Scripts\activate
+pip install -r .\requirements.txt
+```
+
 &copy; 2021

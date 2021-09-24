@@ -33,7 +33,7 @@ class FileTool:
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def load_env(self, full_path):
+    def load_env(self, full_path):  # pragma: no cover
         """
         Load environment vars by reading a config text file
         :param full_path: Path to the config text file.
@@ -107,7 +107,7 @@ class FileTool:
         with open(filename, 'wb') as out_fh:
             out_fh.write(text)
 
-    def _print_log(self, msg=''):
+    def _print_log(self, msg=''):  # pragma: no cover
         """print out the log message"""
         sys.stdout.write(f"[{datetime.now().strftime(TIME_FORMAT)}]: {msg}\n")
 
@@ -196,3 +196,23 @@ class FileTool:
         """
         if Path(f_path).exists():
             rmtree(f_path, onerror=self.on_rm_error)
+
+    def cmp_files_by_byte(self, file1path, file2path):
+        """
+        Compare 2 files by byte
+        :param file1path:
+        :param file2path:
+        :return:
+        """
+        try:
+            with open(file1path, 'rb') as in_fh1, open(file2path, 'rb') as in_fh2:
+                content1 = in_fh1.read()
+                content2 = in_fh2.read()
+                if len(content1) > len(content2):
+                    self._print_log(f"{file1path} > {file2path}: {len(content1)-len(content2)}")
+                else:
+                    self._print_log(f"{file2path} > {file1path}: {len(content2)-len(content1)}")
+        except IOError as e:
+            raise IOError(str(e))
+        except Exception as e:
+            raise Exception(str(e))

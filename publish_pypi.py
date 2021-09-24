@@ -7,6 +7,8 @@
 .. created_on:: 05/06/2021
 
 Publish this speedup-work-lib to pypi.
+Note:
+    Not used for now since we set up Azure pipeline to do the deployment.
 """
 import os
 import re
